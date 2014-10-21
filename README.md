@@ -9,7 +9,38 @@ bktree的作用是：
 
 给定一个词典（很多字符串），然后每输入一个字符串和一个数字k,
 
-从词典中查找出与该字符串编辑距离小于等于k的字符串的数量。
+从词典中查找出与该字符串编辑距离小于等于k的字符串。
+
+~~~ go
+package main
+
+import (
+	"fmt"
+	"github.com/gansidui/bktree"
+	"log"
+)
+
+func main() {
+	if bktree.Levenshtein("hello", "Aelo") != 2 {
+		log.Fatal()
+	}
+
+	if bktree.Levenshtein("我爱你", "你爱我") != 2 {
+		log.Fatal()
+	}
+
+	bk := bktree.New()
+	bk.SetLevenshteinLimit(50)
+
+	bk.Insert("ABCD")
+	bk.Insert("ACED")
+	bk.Insert("SBDE")
+
+	ret := bk.Find("AABB", 3)
+	fmt.Println(ret)
+}
+
+~~~
 
 
 

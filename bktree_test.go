@@ -1,7 +1,12 @@
 package bktree
 
 import (
+	"crypto/rand"
+	"encoding/base64"
+	"fmt"
+	"io"
 	"testing"
+	"time"
 )
 
 func TestLevenshtein(t *testing.T) {
@@ -29,4 +34,76 @@ func TestLevenshtein(t *testing.T) {
 	if Levenshtein("你好世界啊", "世界啊你好") != 4 {
 		t.Fatal()
 	}
+}
+
+func TestInsert(t *testing.T) {
+	bk := New()
+	bk.SetLevenshteinLimit(2)
+
+	if !bk.Insert("") {
+		t.Fatal()
+	}
+
+	if bk.Insert("ABC") {
+		t.Fatal()
+	}
+
+	if !bk.Insert("AB") {
+		t.Fatal()
+	}
+}
+
+func TestInsertAndFind(t *testing.T) {
+	bk := New()
+	bk.SetLevenshteinLimit(50)
+
+	if bk.GetLevenshteinLimit() != 50 {
+		t.Fatal()
+	}
+
+	bk.Insert("656")
+	bk.Insert("67")
+	bk.Insert("9313")
+	bk.Insert("1178")
+	bk.Insert("38")
+
+	if bk.Size() != 5 {
+		t.Fatal()
+	}
+
+	ret := bk.Find("87", 2)
+	if ret[0] != "67" || ret[1] != "38" {
+		t.Fatal()
+	}
+
+	ret = bk.Find("87", 4)
+	if len(ret) != bk.Size() {
+		t.Fatal()
+	}
+}
+
+func Test(t *testing.T) {
+	bk := New()
+	bk.SetLevenshteinLimit(20)
+
+	start := time.Now()
+	for i := 0; i < 100000; i++ {
+		buf := make([]byte, 5)
+		io.ReadFull(rand.Reader, buf)
+		s := base64.StdEncoding.EncodeToString(buf)
+		bk.Insert(s)
+	}
+	fmt.Println("Insert", time.Since(start))
+
+	start = time.Now()
+	for i := 0; i < 10; i++ {
+		buf := make([]byte, 5)
+		io.ReadFull(rand.Reader, buf)
+		s := base64.StdEncoding.EncodeToString(buf)
+		ret := bk.Find(s, 5)
+		if len(ret) == 0 {
+
+		}
+	}
+	fmt.Println("Find", time.Since(start))
 }
