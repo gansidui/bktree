@@ -73,23 +73,34 @@ func (this *BKTree) Insert(s string) bool {
 	return false
 }
 
-func (this *BKTree) find(rt *bktreeNode, s string, k int) (ret []string) {
+func (this *BKTree) find(rt *bktreeNode, s string, k int, n int) (ret []string) {
+	if n == 0 {
+		return []string{}
+	}
+
 	d := Levenshtein(rt.str, s)
 	if d <= k {
 		ret = append(ret, rt.str)
+		if n >= 0 && len(ret) >= n {
+			return ret[0:n]
+		}
 	}
 
 	dx, dy := max(0, d-k), d+k
 	for i := dx; i <= dy; i++ {
 		if rt.child[i] != nil {
-			ret = append(ret, this.find(rt.child[i], s, k)...)
+			ret = append(ret, this.find(rt.child[i], s, k, n)...)
+			if n >= 0 && len(ret) >= n {
+				return ret[0:n]
+			}
 		}
 	}
 	return ret
 }
 
-func (this *BKTree) Find(s string, k int) []string {
-	return this.find(this.root, s, k)
+// if n < 0, there is no limit on the number of find strings.
+func (this *BKTree) Find(s string, k int, n int) []string {
+	return this.find(this.root, s, k, n)
 }
 
 func Levenshtein(s1, s2 string) int {

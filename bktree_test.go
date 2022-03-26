@@ -71,12 +71,17 @@ func TestInsertAndFind(t *testing.T) {
 		t.Fatal()
 	}
 
-	ret := bk.Find("87", 2)
+	ret := bk.Find("87", 2, 2)
 	if ret[0] != "67" || ret[1] != "38" {
 		t.Fatal()
 	}
 
-	ret = bk.Find("87", 4)
+	ret = bk.Find("87", 2, 1)
+	if len(ret) != 1 {
+		t.Fatal()
+	}
+
+	ret = bk.Find("87", 4, -1)
 	if len(ret) != bk.Size() {
 		t.Fatal()
 	}
@@ -100,9 +105,9 @@ func Test(t *testing.T) {
 		buf := make([]byte, 5)
 		io.ReadFull(rand.Reader, buf)
 		s := base64.StdEncoding.EncodeToString(buf)
-		ret := bk.Find(s, 5)
-		if len(ret) == 0 {
-
+		ret := bk.Find(s, 5, 2)
+		if len(ret) > 2 {
+			t.Fatal()
 		}
 	}
 	fmt.Println("Find", time.Since(start))

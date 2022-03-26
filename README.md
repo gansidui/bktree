@@ -1,4 +1,4 @@
-##bktree
+## bktree
 
 编辑距离（Edit Distance），又称Levenshtein距离，是指两个字串之间，由一个转成另一个所需的最少编辑操作次数。
 
@@ -36,7 +36,7 @@ func main() {
 	bk.Insert("ACED")
 	bk.Insert("SBDE")
 
-	ret := bk.Find("AABB", 3)
+	ret := bk.Find("AABB", 3, 2)
 	fmt.Println(ret)
 }
 
@@ -44,6 +44,6 @@ func main() {
 
 
 
-##LICENSE
+## LICENSE
 
 MIT
