@@ -36,7 +36,7 @@ func main() {
 	bk.Insert("ACED")
 	bk.Insert("SBDE")
 
-	ret := bk.Find("AABB", 3, 2)
+	ret := bk.Find("AABB", 3, -1)
 	fmt.Println(ret)
 }
 
