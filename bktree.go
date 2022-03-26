@@ -1,9 +1,5 @@
 package bktree
 
-import (
-	"unicode/utf8"
-)
-
 const DEFAULT_MAX_LEVENSHTEIN = 50
 
 type bktreeNode struct {
@@ -104,19 +100,11 @@ func (this *BKTree) Find(s string, k int, n int) []string {
 }
 
 func Levenshtein(s1, s2 string) int {
-	m, n := utf8.RuneCountInString(s1), utf8.RuneCountInString(s2)
-	runes1, runes2 := make([]rune, m), make([]rune, n)
+	runes1 := []rune(s1)
+	runes2 := []rune(s2)
 
-	// copy runes
-	i, j := 0, 0
-	for _, v := range s1 {
-		runes1[i] = v
-		i++
-	}
-	for _, v := range s2 {
-		runes2[j] = v
-		j++
-	}
+	m := len(runes1)
+	n := len(runes2)
 
 	// roll array
 	d := make([][]int, 2)
@@ -124,15 +112,15 @@ func Levenshtein(s1, s2 string) int {
 	d[1] = make([]int, n+1)
 
 	turn, pre := 0, 0
-	for i = 0; i <= n; i++ {
+	for i := 0; i <= n; i++ {
 		d[turn][i] = i
 	}
-	for i = 1; i <= m; i++ {
+	for i := 1; i <= m; i++ {
 		pre = turn
 		turn = (turn + 1) % 2
 		d[turn][0] = i
 
-		for j = 1; j <= n; j++ {
+		for j := 1; j <= n; j++ {
 			if runes1[i-1] == runes2[j-1] {
 				d[turn][j] = d[pre][j-1]
 			} else {
