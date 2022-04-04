@@ -99,6 +99,10 @@ func (this *BKTree) Find(s string, k int, n int) []string {
 	return this.find(this.root, s, k, n)
 }
 
+func (this *BKTree) Levenshtein(s1, s2 string) int {
+	return Levenshtein(s1, s2)
+}
+
 func Levenshtein(s1, s2 string) int {
 	runes1 := []rune(s1)
 	runes2 := []rune(s2)
