@@ -40,6 +40,11 @@ func TestInsert(t *testing.T) {
 	bk := New()
 	bk.SetLevenshteinLimit(2)
 
+	ret := bk.Find("hello", 1, 1)
+	if len(ret) != 0 {
+		t.Fatal()
+	}
+
 	if !bk.Insert("") {
 		t.Fatal()
 	}

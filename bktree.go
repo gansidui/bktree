@@ -96,6 +96,9 @@ func (this *BKTree) find(rt *bktreeNode, s string, k int, n int) (ret []string) 
 
 // if n < 0, there is no limit on the number of find strings.
 func (this *BKTree) Find(s string, k int, n int) []string {
+	if this.root == nil {
+		return []string{}
+	}
 	return this.find(this.root, s, k, n)
 }
 
