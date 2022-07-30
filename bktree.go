@@ -42,7 +42,7 @@ func (this *BKTree) Size() int {
 
 func (this *BKTree) insert(rt *bktreeNode, s string) bool {
 	d := Levenshtein(rt.str, s)
-	if d > this.levenshteinLimit {
+	if d > this.levenshteinLimit || d >= len(rt.child) {
 		return false
 	}
 
@@ -82,7 +82,7 @@ func (this *BKTree) find(rt *bktreeNode, s string, k int, n int) (ret []string) 
 		}
 	}
 
-	dx, dy := max(0, d-k), d+k
+	dx, dy := max(0, d-k), min(d+k, len(rt.child)-1)
 	for i := dx; i <= dy; i++ {
 		if rt.child[i] != nil {
 			ret = append(ret, this.find(rt.child[i], s, k, n)...)
